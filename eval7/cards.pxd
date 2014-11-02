@@ -6,8 +6,8 @@
 import cython
 
 cdef class Card:
-    cdef cython.ulonglong mask
-    cdef short rank, suit
+    cdef public cython.ulonglong mask
+    cdef public cython.ushort rank, suit
 
 cdef cython.ulonglong cards_to_mask(py_cards)
 

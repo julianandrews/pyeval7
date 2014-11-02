@@ -12,20 +12,7 @@ cdef class Card:
     def __init__(self, card_string):
         self.rank = ranks.index(card_string[0])
         self.suit = suits.index(card_string[1])
-        self.mask = (<cython.ulonglong>1) << \
-                (<cython.ulonglong>(13*self.suit + self.rank))
-
-    property rank:
-        def __get__(self):
-            return self.rank
-    
-    property suit:
-        def __get__(self):
-            return self.suit
-
-    property mask:
-        def __get__(self):
-            return self.mask
+        self.mask = (<cython.ulonglong>1) << (13*self.suit + self.rank)
 
     def __str__(self):
         return ranks[self.rank] + suits[self.suit]
