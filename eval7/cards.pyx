@@ -4,6 +4,7 @@
 # of the MIT license.  See the LICENSE file for details.
 
 import cython
+import random
 
 ranks = ('2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A')
 suits = ('c', 'd', 'h', 's')
@@ -47,6 +48,43 @@ cdef class Card:
 
     def __hash__(self):
         return self.mask
+
+class Deck:
+    def __init__(self):
+        self.cards = []
+        for rank in ranks:
+            for suit in suits:
+                card = Card(rank+suit)
+                self.cards.append(card)
+
+    def __repr__(self):
+        return "Deck({})".format(self.cards)
+
+    def __len__(self):
+        return len(self.cards)
+
+    def __getitem__(self, i):
+        return self.cards[i]
+
+    def shuffle(self):
+        random.shuffle(self.cards)
+        
+    def deal(self, number):
+        if number > len(self.cards):
+            raise ValueError("Insufficient cards in deck")
+        dealt = self.cards[:number]
+        del self.cards[:number]
+        return dealt
+
+    def peek(self, number):
+        if number > len(self.cards):
+            raise ValueError("Insufficient cards in deck")
+        return self.cards[:number]
+
+    def sample(self, number):
+        if number > len(self.cards):
+            raise ValueError("Insufficient cards in deck")        
+        return random.sample(self.cards, number)
 
 cdef cython.ulonglong cards_to_mask(py_cards):
     cdef cython.ulonglong cards = 0
