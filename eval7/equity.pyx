@@ -81,8 +81,8 @@ cdef cython.float hand_vs_range_monte_carlo(cython.ulonglong hand,
         board = start_board
         for j in range(5 - num_board):
             board |= deal_card(board | dealt)
-        hero = cy_evaluate(board | hand)
-        villain = cy_evaluate(board | option)
+        hero = cy_evaluate(board | hand, 7)
+        villain = cy_evaluate(board | option, 7)
         if hero > villain:
             count += 2
         elif hero == villain:
@@ -122,12 +122,12 @@ cdef cython.float hand_vs_range_exact(cython.ulonglong hand,
     cdef cython.uint wins = 0
     cdef cython.uint ties = 0
     cdef cython.ulonglong option  # @DuplicatedSignature
-    cdef cython.uint hero = cy_evaluate(complete_board | hand)
+    cdef cython.uint hero = cy_evaluate(complete_board | hand, 7)
     cdef cython.uint villain  # @DuplicatedSignature
     for i in range(num_options):
         # choose an option for opponent's hand
         option = options[i]
-        villain = cy_evaluate(complete_board | option)
+        villain = cy_evaluate(complete_board | option, 7)
         if hero > villain:
             wins += 1
         elif hero == villain:

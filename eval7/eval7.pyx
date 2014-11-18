@@ -55,7 +55,7 @@ cdef cython.uint HANDTYPE_VALUE_TWOPAIR = ((<cython.uint>2) << HANDTYPE_SHIFT)
 cdef cython.uint HANDTYPE_VALUE_PAIR = ((<cython.uint>1) << HANDTYPE_SHIFT)
 cdef cython.uint HANDTYPE_VALUE_HIGHCARD = ((<cython.uint>0) << HANDTYPE_SHIFT)
 
-cdef cython.uint cy_evaluate(cython.ulonglong cards):
+cdef cython.uint cy_evaluate(cython.ulonglong cards, cython.uint num_cards):
     """
     7-card evaluation function based on Keith Rule's port of PokerEval.
     Pure Python: 20000 calls in 0.176 seconds (113636 calls/sec)
@@ -70,7 +70,7 @@ cdef cython.uint cy_evaluate(cython.ulonglong cards):
     
     cdef cython.uint ranks = sc | sd | sh | ss
     cdef cython.uint n_ranks = n_bits_table[ranks]
-    cdef cython.uint n_dups = <cython.uint>(7 - n_ranks)
+    cdef cython.uint n_dups = <cython.uint>(num_cards - n_ranks)
     
     cdef cython.uint st, t, kickers, second, tc, top
     
@@ -160,7 +160,7 @@ cdef cython.uint cy_evaluate(cython.ulonglong cards):
 
 def evaluate(py_cards):
     cdef cython.ulonglong mask = cards_to_mask(py_cards)
-    cdef cython.uint strength = cy_evaluate(mask)
+    cdef cython.uint strength = cy_evaluate(mask, len(py_cards))
     return strength
 
 cpdef hand_type(cython.uint value):

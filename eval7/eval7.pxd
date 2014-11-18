@@ -5,4 +5,4 @@
 
 import cython
 
-cdef cython.uint cy_evaluate(cython.ulonglong cards)
+cdef cython.uint cy_evaluate(cython.ulonglong cards, cython.uint num_cards)
