@@ -7,6 +7,7 @@ setup(
     version = "0.1",
     description = "Poker Evaluator and Equity Calculator",
     packages = ['eval7'],
-    ext_modules = cythonize('eval7/*.pyx')
+    ext_modules = cythonize('eval7/*.pyx'),
+    install_requires = ['cython', 'pyparsing'],
 )
 
