@@ -10,4 +10,3 @@ setup(
     ext_modules = cythonize('eval7/*.pyx'),
     install_requires = ['cython', 'pyparsing'],
 )
-

@@ -7,16 +7,16 @@ import unittest
 import eval7
 import eval7.wh_rand
 
+
 class TestEval7(unittest.TestCase):
-    
     def test_wh_random(self):
         # 0.9s
         result = {n: 0 for n in range(52)}
         for i in xrange(1900000):
             result[eval7.wh_rand.py_wh_randint(52)] += 1
         for i in range(52):
-            self.assertAlmostEqual(result[i], 36500, delta=1000)    
-    
+            self.assertAlmostEqual(result[i], 36500, delta=1000)
+
     def test_hand_to_mask(self):
         # Highest and lowest cards
         cards = map(eval7.Card, ["As", "2c"])
@@ -25,17 +25,17 @@ class TestEval7(unittest.TestCase):
 
     def test_evaluate(self):
         cases = (
-            (['2c','3d','4h','5s','7s','8d','9c'], 484658, 'High Card'),
-            (['2c','3d','4h','4s','7s','8d','9c'], 16938576, 'Pair'),
-            (['2c','3d','4h','4s','7s','7d','9c'], 33892096, 'Two Pair'),
-            (['2c','3d','4h','7s','7c','7d','9c'], 50688512, 'Trips'),
-            (['2c','3d','4h','5s','7c','7d','6c'], 67436544, 'Straight'),
-            (['Ac','3h','4h','5s','2h','Jh','Kd'], 67305472, 'Straight'),
-            (['Ac','3h','Th','5s','Qh','Jh','Kd'], 67895296, 'Straight'),
-            (['2c','3h','4h','5s','Jh','7h','6h'], 84497441, 'Flush'),
-            (['Ac','3h','Th','Ts','Ks','Kh','Kd'], 101416960, 'Full House'),
-            (['Ac','3h','Th','Ks','Kh','Kd','Kc'], 118210560, 'Quads'),
-            (['3c','2c','5c','Ac','4c','Kd','Kc'], 134414336, 'Straight Flush')
+            (['2c', '3d', '4h', '5s', '7s', '8d', '9c'], 484658, 'High Card'),
+            (['2c', '3d', '4h', '4s', '7s', '8d', '9c'], 16938576, 'Pair'),
+            (['2c', '3d', '4h', '4s', '7s', '7d', '9c'], 33892096, 'Two Pair'),
+            (['2c', '3d', '4h', '7s', '7c', '7d', '9c'], 50688512, 'Trips'),
+            (['2c', '3d', '4h', '5s', '7c', '7d', '6c'], 67436544, 'Straight'),
+            (['Ac', '3h', '4h', '5s', '2h', 'Jh', 'Kd'], 67305472, 'Straight'),
+            (['Ac', '3h', 'Th', '5s', 'Qh', 'Jh', 'Kd'], 67895296, 'Straight'),
+            (['2c', '3h', '4h', '5s', 'Jh', '7h', '6h'], 84497441, 'Flush'),
+            (['Ac', '3h', 'Th', 'Ts', 'Ks', 'Kh', 'Kd'], 101416960, 'Full House'),
+            (['Ac', '3h', 'Th', 'Ks', 'Kh', 'Kd', 'Kc'], 118210560, 'Quads'),
+            (['3c', '2c', '5c', 'Ac', '4c', 'Kd', 'Kc'], 134414336, 'Straight Flush')
             )
         for card_strs, expected_val, expected_type in cases:
             cards = map(eval7.Card, card_strs)
@@ -67,8 +67,9 @@ class TestEval7(unittest.TestCase):
         hand = map(eval7.Card, ("As", "Ad"))
         villain = eval7.HandRange("AA, A3o, 32s")
         board = []
-        equity = eval7.py_hand_vs_range_monte_carlo(hand, villain, board, 
-                10000000)
+        equity = eval7.py_hand_vs_range_monte_carlo(
+            hand, villain, board, 10000000
+        )
         self.assertAlmostEqual(equity, 0.85337, delta=0.002)
 
     def test_all_hands_vs_range(self):
@@ -81,7 +82,7 @@ class TestEval7(unittest.TestCase):
         hand2 = tuple(map(eval7.Card, ("3h", "2c")))
         self.assertAlmostEqual(equity_map[hand1], 0.85337, delta=0.002)
         self.assertAlmostEqual(equity_map[hand2], 0.22865, delta=0.002)
-        
+
         # Hero has an impossible hand in his range.
         hero = eval7.HandRange("JsJc,QsJs")
         villain = eval7.HandRange("JJ")
@@ -90,6 +91,7 @@ class TestEval7(unittest.TestCase):
         hand = tuple(map(eval7.Card, ("Qs", "Js")))
         self.assertAlmostEqual(equity_map[hand], 0.03687, delta=0.0002)
         self.assertEqual(len(equity_map), 1)
+
 
 if __name__ == '__main__':
     # 2013-02-09 28 seconds

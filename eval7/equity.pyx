@@ -8,19 +8,24 @@ from wh_rand cimport wh_randint
 from eval7 cimport cy_evaluate
 from cards cimport cards_to_mask
 
+
 cdef extern from "stdlib.h":
     ctypedef unsigned long size_t
     void *malloc(size_t n_bytes)
     void free(void *ptr)
 
+
 cdef cython.ulonglong card_masks_table[52]
+
 
 cdef cython.uint load_card_masks():
     for i in range(52):
         card_masks_table[i] = 1 << i
     return 0
 
+
 load_card_masks()
+
 
 cdef cython.uint filter_options(cython.ulonglong *source, 
         cython.ulonglong *target, 
@@ -39,6 +44,7 @@ cdef cython.uint filter_options(cython.ulonglong *source,
             total += 1
     return total
 
+
 cdef cython.ulonglong deal_card(cython.ulonglong dead):
     cdef cython.uint cardex
     cdef cython.ulonglong card
@@ -47,6 +53,7 @@ cdef cython.ulonglong deal_card(cython.ulonglong dead):
         card = card_masks_table[cardex]
         if dead & card == 0:
             return card
+
 
 cdef cython.float hand_vs_range_monte_carlo(cython.ulonglong hand, 
         cython.ulonglong *options, 
@@ -89,6 +96,7 @@ cdef cython.float hand_vs_range_monte_carlo(cython.ulonglong hand,
             count += 1
     return 0.5 * <cython.double>count / <cython.double>iterations
 
+
 def py_hand_vs_range_monte_carlo(py_hand, py_villain, py_board, 
         py_iterations):
     cdef cython.ulonglong hand = cards_to_mask(py_hand)
@@ -109,6 +117,7 @@ def py_hand_vs_range_monte_carlo(py_hand, py_villain, py_board,
             start_board, num_board, iterations)
     free(options)
     return equity
+
 
 cdef cython.float hand_vs_range_exact(cython.ulonglong hand, 
         cython.ulonglong *options, 
@@ -134,6 +143,7 @@ cdef cython.float hand_vs_range_exact(cython.ulonglong hand,
             ties += 1
     return (wins + 0.5 * ties) / <cython.double>num_options
 
+
 def py_hand_vs_range_exact(py_hand, py_villain, py_board):
     cdef cython.ulonglong hand = cards_to_mask(py_hand)  # @DuplicatedSignature
     cdef cython.int num_options = len(py_villain)  # @DuplicatedSignature
@@ -151,6 +161,7 @@ def py_hand_vs_range_exact(py_hand, py_villain, py_board):
     equity = hand_vs_range_exact(hand, options, num_options, complete_board)
     free(options)
     return equity
+
 
 cdef void all_hands_vs_range(cython.ulonglong *hands, 
         cython.uint num_hands,
@@ -194,6 +205,7 @@ cdef void all_hands_vs_range(cython.ulonglong *hands,
         result[i] = equity
     free(options)
         
+
 def py_all_hands_vs_range(py_hero, py_villain, py_board, py_iterations):
     """
     Return dict mapping hero's hand to equity against villain's range on this board.
@@ -244,4 +256,3 @@ def py_all_hands_vs_range(py_hero, py_villain, py_board, py_iterations):
     free(result)
     
     return py_result
-

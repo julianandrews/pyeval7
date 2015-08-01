@@ -20,7 +20,7 @@ Groups of tokens can be combined with a weight. e.g.:
     0.6(AA, AK)
     40%(ATs+)
 
-Examples: 
+Examples:
     string_to_tokens("AA, 0.8(AKs)") = [('AA', 1.0), ('AKs', 0.8)]
     tokens_to_string([('AA', 1.0), ('AQs', 1.0), ('AJs', 1.0)]) = 'AA, AQs-AJs'
     validate_string("TT+, A8o-ATo, 80%(KTs+)") = True
@@ -29,20 +29,22 @@ Examples:
 import pyparsing
 from cards import Card, ranks, suits
 
+
 def string_to_hands(s):
     """Parse a handstring and return a list of (hand, weight) tuples."""
     hands = []
     for token, weight in string_to_tokens(s):
-        hands += [(tuple(map(Card, hand)), weight) 
-                for hand in token_to_hands(token)]
+        hands += [(tuple(map(Card, hand)), weight)
+                  for hand in token_to_hands(token)]
     return hands
+
 
 def string_to_tokens(s):
     """Parse a handstring and return a list of (token, weight) tuples."""
     tokens = []
     try:
         results = parser.parseString(s)
-    except pyparsing.ParseException, e:
+    except pyparsing.ParseException:
         raise RangeStringError("Failed to parse string")
     for r in results:
         if len(r) == 2:
@@ -51,13 +53,13 @@ def string_to_tokens(s):
         else:
             weight = 1.0
             htgs = r[0]
-        tokens += [(token, weight) for token in 
-                sum(map(expand_hand_type_group, htgs), [])]
+        tokens += [(token, weight) for token in
+                   sum(map(expand_hand_type_group, htgs), [])]
     return tokens
+
 
 def tokens_to_string(tokens):
     """Take a list of (token, weight) tuples and return a handstring"""
-    
     def t_to_s_helper(tokens, weight):
 
         def group(toks):
@@ -81,7 +83,7 @@ def tokens_to_string(tokens):
                 if len(g) == 1:
                     strs.append(g[0])
                 elif g[-1] == 'AA' or \
-                        ranks.index(g[-1][0]) -1 == ranks.index(g[-1][1]):
+                        ranks.index(g[-1][0]) - 1 == ranks.index(g[-1][1]):
                     strs.append("{}+".format(g[0]))
                 else:
                     strs.append("{}-{}".format(*reversed(g)))
@@ -109,31 +111,34 @@ def tokens_to_string(tokens):
         other_strings = []
         for rank in ranks:
             for suitedness in ('o', 's', 'n'):
-                filt = [x for x in other if x[0] == rank and
-                    token_suitedness(x) == suitedness and 
-                    ranks.index(x[0]) > ranks.index(x[1])]
+                filt = [x for x in other
+                        if x[0] == rank and
+                        token_suitedness(x) == suitedness and
+                        ranks.index(x[0]) > ranks.index(x[1])]
                 filt.sort(key=lambda x: ranks.index(x[1]))
                 other_strings += group(filt)
         other_strings.reverse()
         return ', '.join(pair_strings + other_strings + single_hands + tags)
-    
+
     strs = []
     weights = list(set([w for (t, w) in tokens]))
     if 1.0 in weights:
         strs.append(t_to_s_helper(tokens, 1.0))
         weights.remove(1.0)
     weights.sort(reverse=True)
-    strs += ["{}%({})".format(int(100*w), t_to_s_helper(tokens, w)) 
-            for w in weights]
+    strs += ["{}%({})".format(int(100*w), t_to_s_helper(tokens, w))
+             for w in weights]
     return ', '.join(strs)
+
 
 def validate_string(s):
     """Return true if s is a parseable range string"""
     try:
         string_to_tokens(s)
-    except RangeStringError, e:
+    except RangeStringError:
         return False
     return True
+
 
 def make_parser():
     """Generate the pyparsing parser for hand strings."""
@@ -148,29 +153,34 @@ def make_parser():
     digits = pyparsing.Word(pyparsing.nums)
     natural_number = pyparsing.Word('123456789', pyparsing.nums)
     decimal = natural_number ^ \
-        (pyparsing.Optional(pyparsing.Literal('0')) + 
-        pyparsing.Literal('.') + digits) ^ \
+        (pyparsing.Optional(pyparsing.Literal('0')) +
+         pyparsing.Literal('.') + digits) ^ \
         (natural_number + pyparsing.Literal('.') + digits) ^ \
         (natural_number + pyparsing.Literal('.'))
     decimal.setParseAction(lambda s, loc, toks: ''.join(toks))
-    weight = pyparsing.Group(decimal + 
-        pyparsing.Optional(pyparsing.Literal('%')))
+    weight = pyparsing.Group(
+        decimal + pyparsing.Optional(pyparsing.Literal('%'))
+    )
     hand_type = pyparsing.Word(ranks_str, exact=2) + \
         pyparsing.Optional(suitedness) + \
         ~pyparsing.FollowedBy(pyparsing.Literal('%') ^ pyparsing.Literal('('))
     hand_type.setParseAction(lambda s, loc, toks: ''.join(toks))
     tag = pyparsing.Literal('#') + pyparsing.Word(pyparsing.alphanums + '_') \
         + pyparsing.Literal('#')
-    hand_type_group = pyparsing.Group(hand_type ^ 
+    hand_type_group = pyparsing.Group(
+        hand_type ^
         (hand_type + pyparsing.Literal('-') + hand_type) ^
-        (hand_type + pyparsing.Literal('+')) ^ hand ^ tag)
+        (hand_type + pyparsing.Literal('+')) ^ hand ^ tag
+    )
     hand_group_list = pyparsing.Group(pyparsing.delimitedList(hand_type_group))
-    weighted_hand_group_list = pyparsing.Group((weight + 
-        pyparsing.Literal('(').suppress() + hand_group_list + 
-        pyparsing.Literal(')').suppress()) ^ hand_group_list)
+    weighted_hand_group_list = pyparsing.Group(
+        (weight + pyparsing.Literal('(').suppress() + hand_group_list +
+         pyparsing.Literal(')').suppress()) ^ hand_group_list
+    )
     hand_range = pyparsing.Optional(pyparsing.delimitedList(
         weighted_hand_group_list)) + pyparsing.StringEnd()
     return hand_range
+
 
 def weight_to_float(w):
     """Take a parsed weight list and return a float. e.g.:
@@ -184,14 +194,14 @@ def weight_to_float(w):
 
 def expand_hand_type_group(htg):
     """Take a hand type grouping such as ATs+ or K8o-KJo and return a list of
-    hand type tokens. e.g.: 
+    hand type tokens. e.g.:
         ATs-AQs -> ["ATs", "AJs", "AQs"]
     """
     tokens = []
 
     def sorted_ranks(token):
         return sorted(map(ranks.index, token[:2]), reverse=True)
-   
+
     if htg[0] == "#":
         tokens = [''.join(htg)]
     elif len(htg) == 1:
@@ -239,6 +249,7 @@ def expand_hand_type_group(htg):
             expanded.append(token)
     return expanded
 
+
 def normalize_token(token):
     if token[0] == '#':
         normalized = token
@@ -253,13 +264,16 @@ def normalize_token(token):
         else:
             normalized = token
     else:
-        rs = sorted(map(lambda x: ranks.index(x.upper()), token[:2]), 
-                reverse=True)
+        rs = sorted(
+            map(lambda x: ranks.index(x.upper()), token[:2]),
+            reverse=True
+        )
         normalized = ''.join(ranks[i] for i in rs) + token_suitedness(token)
     return normalized
 
+
 def token_suitedness(ht):
-    """Determine the suitedness of a handtype token. 
+    """Determine the suitedness of a handtype token.
         s=suited, o=offsuit, p=pair, n=not specified
     """
     if len(ht) == 3:
@@ -271,9 +285,10 @@ def token_suitedness(ht):
     else:
         return 'n'
 
+
 def token_to_hands(ht):
-    """Take a single handtype token and return a list of possible hand string 
-    tuples. e.g.: 
+    """Take a single handtype token and return a list of possible hand string
+    tuples. e.g.:
         ATs -> [("Ac", "Tc"), ("Ad", "Td"), ("Ah", "Th"), ("As", "Ts")]
     """
     hands = []
@@ -295,8 +310,9 @@ def token_to_hands(ht):
                 hands.append(hand)
     return hands
 
+
 class RangeStringError(Exception):
     pass
 
-parser = make_parser()
 
+parser = make_parser()

@@ -6,6 +6,7 @@
 import cython
 from cards cimport cards_to_mask
 
+
 cdef extern from "arrays.h":
     cython.ushort n_bits_table[8192]
     cython.ushort straight_table[8192]
@@ -54,6 +55,7 @@ cdef cython.uint HANDTYPE_VALUE_TRIPS = ((<cython.uint>3) << HANDTYPE_SHIFT)
 cdef cython.uint HANDTYPE_VALUE_TWOPAIR = ((<cython.uint>2) << HANDTYPE_SHIFT)
 cdef cython.uint HANDTYPE_VALUE_PAIR = ((<cython.uint>1) << HANDTYPE_SHIFT)
 cdef cython.uint HANDTYPE_VALUE_HIGHCARD = ((<cython.uint>0) << HANDTYPE_SHIFT)
+
 
 cdef cython.uint cy_evaluate(cython.ulonglong cards, cython.uint num_cards):
     """
@@ -158,6 +160,7 @@ cdef cython.uint cy_evaluate(cython.ulonglong cards, cython.uint num_cards):
             retval += <cython.uint>((top_card_table[ranks ^ (1U << <cython.int>top) ^ (1 << <cython.int>second)]) << THIRD_CARD_SHIFT)
             return retval
 
+
 def evaluate(py_cards):
     cdef cython.ulonglong mask = cards_to_mask(py_cards)
     cdef cython.uint strength = cy_evaluate(mask, len(py_cards))
@@ -183,4 +186,3 @@ cpdef hand_type(cython.uint value):
         return "Quads"
     else:
         return "Straight Flush"
-

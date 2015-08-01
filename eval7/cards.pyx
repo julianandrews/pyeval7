@@ -6,8 +6,10 @@
 import cython
 import random
 
+
 ranks = ('2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A')
 suits = ('c', 'd', 'h', 's')
+
 
 cdef class Card:
     def __init__(self, card_string):
@@ -49,6 +51,7 @@ cdef class Card:
     def __hash__(self):
         return self.mask
 
+
 class Deck:
     def __init__(self):
         self.cards = []
@@ -86,9 +89,9 @@ class Deck:
             raise ValueError("Insufficient cards in deck")        
         return random.sample(self.cards, number)
 
+
 cdef cython.ulonglong cards_to_mask(py_cards):
     cdef cython.ulonglong cards = 0
     for py_card in py_cards:
         cards |= py_card.mask
     return cards
-

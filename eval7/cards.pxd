@@ -10,4 +10,3 @@ cdef class Card:
     cdef public cython.ushort rank, suit
 
 cdef cython.ulonglong cards_to_mask(py_cards)
-

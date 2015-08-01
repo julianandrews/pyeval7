@@ -1,5 +1,6 @@
 import range_string
 
+
 class HandRange:
     def __init__(self, s):
         self.string = s
