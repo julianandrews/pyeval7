@@ -5,6 +5,9 @@ __pycache__/
 # C extensions
 *.so
 
+# Cython generated C files
+*.c
+
 # Distribution / packaging
 .Python
 env/
