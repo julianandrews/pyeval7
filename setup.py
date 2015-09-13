@@ -1,17 +1,11 @@
 from setuptools import setup
+from Cython.Build import cythonize
 
-try:
-    from Cython.Build import cythonize
-except ImportError:
-    from distutils.extension import Extension
-    extensions = [Extension(name, ['eval7/%s.c' % name])
-                  for name in ('wh_rand', 'cards', 'equity', 'eval7')]
-else:
-    extensions = cythonize('eval7/*.pyx')
+extensions = cythonize('eval7/*.pyx')
 
 setup(
-    name='Eval7',
-    version='0.1.1',
+    name='eval7',
+    version='0.1.2',
     description='A poker hand evaluation and equity calculation library',
     url='https://github.com/JulianAndrews/pyeval7',
     license='MIT',
