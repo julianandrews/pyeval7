@@ -27,7 +27,7 @@ Examples:
 """
 
 import pyparsing
-from cards import Card, ranks, suits
+from .cards import Card, ranks, suits
 
 
 def string_to_hands(s):
