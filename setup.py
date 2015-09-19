@@ -21,5 +21,5 @@ setup(
     keywords='poker equity library',
     packages=['eval7'],
     ext_modules=extensions,
-    install_requires=['pyparsing'],
+    install_requires=['pyparsing', 'future'],
 )

@@ -5,18 +5,9 @@
 
 import unittest
 import eval7
-import eval7.wh_rand
 
 
 class TestEval7(unittest.TestCase):
-    def test_wh_random(self):
-        # 0.9s
-        result = {n: 0 for n in range(52)}
-        for i in xrange(1900000):
-            result[eval7.wh_rand.py_wh_randint(52)] += 1
-        for i in range(52):
-            self.assertAlmostEqual(result[i], 36500, delta=1000)
-
     def test_hand_to_mask(self):
         # Highest and lowest cards
         cards = map(eval7.Card, ["As", "2c"])
@@ -35,8 +26,8 @@ class TestEval7(unittest.TestCase):
             (['2c', '3h', '4h', '5s', 'Jh', '7h', '6h'], 84497441, 'Flush'),
             (['Ac', '3h', 'Th', 'Ts', 'Ks', 'Kh', 'Kd'], 101416960, 'Full House'),
             (['Ac', '3h', 'Th', 'Ks', 'Kh', 'Kd', 'Kc'], 118210560, 'Quads'),
-            (['3c', '2c', '5c', 'Ac', '4c', 'Kd', 'Kc'], 134414336, 'Straight Flush')
-            )
+            (['3c', '2c', '5c', 'Ac', '4c', 'Kd', 'Kc'], 134414336, 'Straight Flush'),
+        )
         for card_strs, expected_val, expected_type in cases:
             cards = map(eval7.Card, card_strs)
             value = eval7.evaluate(cards)
