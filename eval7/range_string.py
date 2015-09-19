@@ -193,9 +193,9 @@ def weight_to_float(w):
 
 
 def expand_hand_type_group(htg):
-    """Take a hand type grouping such as ATs+ or K8o-KJo and return a list of
-    hand type tokens. e.g.:
-        ATs-AQs -> ["ATs", "AJs", "AQs"]
+    """Take a parsed hand type grouping such as ('ATs', '+') or
+    ('K8o', '-', 'KJo') and return a list of hand type tokens. e.g.:
+        ('ATs', '-', 'AQs') -> ["ATs", "AJs", "AQs"]
     """
     tokens = []
 
@@ -252,10 +252,12 @@ def expand_hand_type_group(htg):
 
 def normalize_token(token):
     if token[0] == '#':
+        # Comment
         normalized = token
     elif len(token) == 4:
-        rs = map(ranks.index, [token[0].upper(), token[2].upper()])
-        suit_ranks = map(suits.index, [token[1], token[3]])
+        # Single hand (e.g.: 7c3d)
+        rs = [ranks.index(x) for x in (token[0].upper(), token[2].upper())]
+        suit_ranks = [suits.index(x) for x in (token[1], token[3])]
         if rs[0] == rs[1] and suit_ranks[0] == suit_ranks[1]:
             raise RangeStringError("Invalid Token: {}".format(token))
         if rs[0] < rs[1] or \
@@ -264,8 +266,9 @@ def normalize_token(token):
         else:
             normalized = token
     else:
+        # Normal token (e.g.: 22, ATs, KQ)
         rs = sorted(
-            map(lambda x: ranks.index(x.upper()), token[:2]),
+            [ranks.index(x.upper()) for x in token[:2]],
             reverse=True
         )
         normalized = ''.join(ranks[i] for i in rs) + token_suitedness(token)

@@ -10,7 +10,7 @@ import eval7
 class TestEval7(unittest.TestCase):
     def test_hand_to_mask(self):
         # Highest and lowest cards
-        cards = map(eval7.Card, ["As", "2c"])
+        cards = [eval7.Card(x) for x in ("As", "2c")]
         result = cards[0].mask | cards[1].mask
         self.assertEqual(result, 2251799813685249)
 
@@ -29,30 +29,24 @@ class TestEval7(unittest.TestCase):
             (['3c', '2c', '5c', 'Ac', '4c', 'Kd', 'Kc'], 134414336, 'Straight Flush'),
         )
         for card_strs, expected_val, expected_type in cases:
-            cards = map(eval7.Card, card_strs)
+            cards = tuple(map(eval7.Card, card_strs))
             value = eval7.evaluate(cards)
             hand_type = eval7.hand_type(value)
             self.assertEqual(value, expected_val)
             self.assertEqual(hand_type, expected_type)
 
     def test_hand_vs_range_exact(self):
-        hand = map(eval7.Card, ("Ac", "Ah"))
-        villain = eval7.HandRange("AA")
-        board = map(eval7.Card, ("Kh", "Jd", "8c", "5d", "2s"))
-        equity = eval7.py_hand_vs_range_exact(hand, villain, board)
-        self.assertEqual(equity, 0.5)
-
-        hand = map(eval7.Card, ("Ac", "Ah"))
-        villain = eval7.HandRange("AsAd")
-        board = map(eval7.Card, ("Kh", "Jd", "8c", "5d", "2s"))
-        equity = eval7.py_hand_vs_range_exact(hand, villain, board)
-        self.assertEqual(equity, 0.5)
-
-        hand = map(eval7.Card, ("As", "Ad"))
-        villain = eval7.HandRange("AA, A3o, 32s")
-        board = map(eval7.Card, ("Kh", "Jd", "8c", "5d", "2s"))
-        equity = eval7.py_hand_vs_range_exact(hand, villain, board)
-        self.assertAlmostEqual(equity, 0.95, places=7)
+        cases = (
+            (("Ac", "Ah"), "AA", ("Kh", "Jd", "8c", "5d", "2s"), 0.5),
+            (("Ac", "Ah"), "AsAd", ("Kh", "Jd", "8c", "5d", "2s"), 0.5),
+            (("As", "Ad"), "AA, A3o, 32s", ("Kh", "Jd", "8c", "5d", "2s"), 0.95),
+        )
+        for hand_strs, range_str, board_strs, expected_equity in cases:
+            hand = tuple(map(eval7.Card, hand_strs))
+            villain = eval7.HandRange(range_str)
+            board = tuple(map(eval7.Card, board_strs))
+            equity = eval7.py_hand_vs_range_exact(hand, villain, board)
+            self.assertAlmostEqual(equity, expected_equity, places=7)
 
     def test_hand_vs_range_monte_carlo(self):
         hand = map(eval7.Card, ("As", "Ad"))
@@ -77,7 +71,7 @@ class TestEval7(unittest.TestCase):
         # Hero has an impossible hand in his range.
         hero = eval7.HandRange("JsJc,QsJs")
         villain = eval7.HandRange("JJ")
-        board = map(eval7.Card, ("Kh", "Jd", "8c"))
+        board = tuple(map(eval7.Card, ("Kh", "Jd", "8c")))
         equity_map = eval7.py_all_hands_vs_range(hero, villain, board, 10000000)
         hand = tuple(map(eval7.Card, ("Qs", "Js")))
         self.assertAlmostEqual(equity_map[hand], 0.03687, delta=0.0002)
