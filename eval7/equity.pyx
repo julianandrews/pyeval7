@@ -5,7 +5,7 @@
 
 import cython
 from wh_rand cimport wh_randint
-from eval7 cimport cy_evaluate
+from eval7_mod cimport cy_evaluate
 from cards cimport cards_to_mask
 
 
