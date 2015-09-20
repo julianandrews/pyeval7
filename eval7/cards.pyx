@@ -12,6 +12,14 @@ suits = ('c', 'd', 'h', 's')
 
 
 cdef class Card:
+    """
+    A card with a rank and suit, initialized from a string, and with an
+    integer 'mask' value used for evaluation and equity calcuations.
+
+    Example:
+        cards = map(Card, ('As', '4d', '4c', '3s', '2d')
+        eval7.evaluate(cards)
+    """
     def __init__(self, card_string):
         self.rank = ranks.index(card_string[0])
         self.suit = suits.index(card_string[1])
@@ -53,7 +61,17 @@ cdef class Card:
 
 
 class Deck:
+    """
+    A set of all 52 distinct cards, pregenerated to minimize overhead.
+    Also provides a few convenience methods for simple simulations.
+    """
     def __init__(self):
+        """
+        Create a new deck object.
+
+        Usage:
+            d = Deck()
+        """
         self.cards = []
         for rank in ranks:
             for suit in suits:
@@ -70,24 +88,28 @@ class Deck:
         return self.cards[i]
 
     def shuffle(self):
+        """Randomize the order of the cards in the deck."""
         random.shuffle(self.cards)
         
-    def deal(self, number):
-        if number > len(self.cards):
+    def deal(self, n):
+        """Remove the top n cards from the deck and return them."""
+        if n> len(self.cards):
             raise ValueError("Insufficient cards in deck")
-        dealt = self.cards[:number]
-        del self.cards[:number]
+        dealt = self.cards[:n]
+        del self.cards[:n]
         return dealt
 
-    def peek(self, number):
-        if number > len(self.cards):
+    def peek(self, n):
+        """Return the top n cards from the deck without altering it."""
+        if n> len(self.cards):
             raise ValueError("Insufficient cards in deck")
-        return self.cards[:number]
+        return self.cards[:n]
 
-    def sample(self, number):
-        if number > len(self.cards):
+    def sample(self, n):
+        """Return n random cards from the deck. The deck will be unaltered."""
+        if n> len(self.cards):
             raise ValueError("Insufficient cards in deck")        
-        return random.sample(self.cards, number)
+        return random.sample(self.cards, n)
 
 
 cdef cython.ulonglong cards_to_mask(py_cards):

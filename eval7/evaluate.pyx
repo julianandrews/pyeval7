@@ -162,6 +162,13 @@ cdef cython.uint cy_evaluate(cython.ulonglong cards, cython.uint num_cards):
 
 
 def evaluate(py_cards):
+    """
+    evaluate(cards) -> value
+
+    Evaluate a poker hand and produce a numeric value. Higher numeric values
+    indicate stronger hands. 'cards' should be a sequence of 5 to 7 eval7.Card
+    objects.
+    """
     cdef cython.ulonglong mask = cards_to_mask(py_cards)
     cdef cython.uint strength = cy_evaluate(mask, len(py_cards))
     return strength
