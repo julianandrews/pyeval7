@@ -1,6 +1,9 @@
 eval7
 =====
 
+.. image:: https://travis-ci.org/JulianAndrews/pyeval7.svg?branch=master
+    :target: https://travis-ci.org/JulianAndrews/pyeval7
+
 Python Texas Hold'em hand evaluation library based on Anonymous7's codebase
 which is in turn based on Keith Rule's hand evaluator (which you can see
 here_). The library also provides a parser for an extended set of PokerStove
