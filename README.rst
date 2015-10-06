@@ -24,8 +24,8 @@ implemented in Cython.
 Installation
 ------------
 
-eval7 requires python 2.6+. The build process requires cython (tested with
-0.23). If you have a working copy of python::
+eval7 is tested on python 2.7 and 3.3. The build process requires cython
+(tested with 0.23). If you have a working copy of python::
 
     pip install cython
 
@@ -56,10 +56,14 @@ Basic usage::
      Card("3d")]
     >>> eval7.evaluate(hand)
     17025648
+    >>> eval7.handtype(17025648)
+    'Pair'
 
     >>> hand = [eval7.Card(s) for s in ('As', '2c', '3d', '5s', '4c')]
     >>> eval7.evaluate(hand)
     67305472
+    >>> eval7.handtype(67305472)
+    'Straight'
 
 Larger numbers represent better hands!
 

@@ -31,9 +31,9 @@ class TestEval7(unittest.TestCase):
         for card_strs, expected_val, expected_type in cases:
             cards = tuple(map(eval7.Card, card_strs))
             value = eval7.evaluate(cards)
-            hand_type = eval7.hand_type(value)
+            handtype = eval7.handtype(value)
             self.assertEqual(value, expected_val)
-            self.assertEqual(hand_type, expected_type)
+            self.assertEqual(handtype, expected_type)
 
     def test_hand_vs_range_exact(self):
         cases = (

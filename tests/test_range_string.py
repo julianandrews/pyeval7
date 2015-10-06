@@ -56,7 +56,7 @@ class RangeStringTestCase(unittest.TestCase):
                 range_string.weight_to_float(parsed_weight), value, places=7
             )
 
-    def test_expand_hand_type_group(self):
+    def test_expand_handtype_group(self):
         cases = (
             (('ATs', '-', 'AQs'), ['ATs', 'AJs', 'AQs']),
             (('JTn', '-', 'J8n'), ['J8o', 'J8s', 'J9o', 'J9s', 'JTo', 'JTs']),
@@ -67,14 +67,14 @@ class RangeStringTestCase(unittest.TestCase):
         )
 
         for htg, tokens in cases:
-            self.assertEqual(range_string.expand_hand_type_group(htg), tokens)
+            self.assertEqual(range_string.expand_handtype_group(htg), tokens)
 
         with self.assertRaises(range_string.RangeStringError):
-            range_string.expand_hand_type_group(('94o', '-', '97s'))
+            range_string.expand_handtype_group(('94o', '-', '97s'))
         with self.assertRaises(range_string.RangeStringError):
-            range_string.expand_hand_type_group(('22', '-', '97s'))
+            range_string.expand_handtype_group(('22', '-', '97s'))
         with self.assertRaises(range_string.RangeStringError):
-            range_string.expand_hand_type_group(('J3s', '-', 'QQ'))
+            range_string.expand_handtype_group(('J3s', '-', 'QQ'))
 
     def test_token_to_hands(self):
         cases = (

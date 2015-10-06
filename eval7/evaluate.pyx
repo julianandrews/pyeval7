@@ -173,7 +173,7 @@ def evaluate(py_cards):
     cdef cython.uint strength = cy_evaluate(mask, len(py_cards))
     return strength
 
-cpdef hand_type(cython.uint value):
+cpdef handtype(cython.uint value):
     cdef cython.uint ht = (value >> HANDTYPE_SHIFT)
     if ht == HANDTYPE_HIGHCARD:
         return "High Card"

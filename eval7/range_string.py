@@ -54,7 +54,7 @@ def string_to_tokens(s):
             weight = 1.0
             htgs = r[0]
         tokens += [(token, weight) for token in
-                   sum(map(expand_hand_type_group, htgs), [])]
+                   sum(map(expand_handtype_group, htgs), [])]
     return tokens
 
 
@@ -161,18 +161,18 @@ def make_parser():
     weight = pyparsing.Group(
         decimal + pyparsing.Optional(pyparsing.Literal('%'))
     )
-    hand_type = pyparsing.Word(ranks_str, exact=2) + \
+    handtype = pyparsing.Word(ranks_str, exact=2) + \
         pyparsing.Optional(suitedness) + \
         ~pyparsing.FollowedBy(pyparsing.Literal('%') ^ pyparsing.Literal('('))
-    hand_type.setParseAction(lambda s, loc, toks: ''.join(toks))
+    handtype.setParseAction(lambda s, loc, toks: ''.join(toks))
     tag = pyparsing.Literal('#') + pyparsing.Word(pyparsing.alphanums + '_') \
         + pyparsing.Literal('#')
-    hand_type_group = pyparsing.Group(
-        hand_type ^
-        (hand_type + pyparsing.Literal('-') + hand_type) ^
-        (hand_type + pyparsing.Literal('+')) ^ hand ^ tag
+    handtype_group = pyparsing.Group(
+        handtype ^
+        (handtype + pyparsing.Literal('-') + handtype) ^
+        (handtype + pyparsing.Literal('+')) ^ hand ^ tag
     )
-    hand_group_list = pyparsing.Group(pyparsing.delimitedList(hand_type_group))
+    hand_group_list = pyparsing.Group(pyparsing.delimitedList(handtype_group))
     weighted_hand_group_list = pyparsing.Group(
         (weight + pyparsing.Literal('(').suppress() + hand_group_list +
          pyparsing.Literal(')').suppress()) ^ hand_group_list
@@ -192,7 +192,7 @@ def weight_to_float(w):
     return r
 
 
-def expand_hand_type_group(htg):
+def expand_handtype_group(htg):
     """Take a parsed hand type grouping such as ('ATs', '+') or
     ('K8o', '-', 'KJo') and return a list of hand type tokens. e.g.:
         ('ATs', '-', 'AQs') -> ["ATs", "AJs", "AQs"]
