@@ -17,7 +17,7 @@ cdef class Card:
     integer 'mask' value used for evaluation and equity calcuations.
 
     Example:
-        cards = map(Card, ('As', '4d', '4c', '3s', '2d')
+        cards = map(Card, ('As', '4d', '4c', '3s', '2d'))
         eval7.evaluate(cards)
     """
     def __init__(self, card_string):
