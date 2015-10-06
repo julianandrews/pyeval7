@@ -7,7 +7,7 @@ from __future__ import absolute_import
 
 import unittest
 
-from eval7 import range_string
+from eval7 import rangestring
 
 
 class RangeStringTestCase(unittest.TestCase):
@@ -25,7 +25,7 @@ class RangeStringTestCase(unittest.TestCase):
 
     def test_string_to_tokens(self):
         self.assertEqual(
-            range_string.string_to_tokens("AA, 0.8(AKs)"),
+            rangestring.string_to_tokens("AA, 0.8(AKs)"),
             [('AA', 1.0), ('AKs', 0.8)]
         )
 
@@ -39,9 +39,9 @@ class RangeStringTestCase(unittest.TestCase):
             'AX+',
         )
         for case in true_cases:
-            self.assertTrue(range_string.validate_string(case))
+            self.assertTrue(rangestring.validate_string(case))
         for case in false_cases:
-            self.assertFalse(range_string.validate_string(case))
+            self.assertFalse(rangestring.validate_string(case))
 
     def test_weight_to_float(self):
         cases = (
@@ -53,7 +53,7 @@ class RangeStringTestCase(unittest.TestCase):
         )
         for parsed_weight, value in cases:
             self.assertAlmostEqual(
-                range_string.weight_to_float(parsed_weight), value, places=7
+                rangestring.weight_to_float(parsed_weight), value, places=7
             )
 
     def test_expand_handtype_group(self):
@@ -67,14 +67,14 @@ class RangeStringTestCase(unittest.TestCase):
         )
 
         for htg, tokens in cases:
-            self.assertEqual(range_string.expand_handtype_group(htg), tokens)
+            self.assertEqual(rangestring.expand_handtype_group(htg), tokens)
 
-        with self.assertRaises(range_string.RangeStringError):
-            range_string.expand_handtype_group(('94o', '-', '97s'))
-        with self.assertRaises(range_string.RangeStringError):
-            range_string.expand_handtype_group(('22', '-', '97s'))
-        with self.assertRaises(range_string.RangeStringError):
-            range_string.expand_handtype_group(('J3s', '-', 'QQ'))
+        with self.assertRaises(rangestring.RangeStringError):
+            rangestring.expand_handtype_group(('94o', '-', '97s'))
+        with self.assertRaises(rangestring.RangeStringError):
+            rangestring.expand_handtype_group(('22', '-', '97s'))
+        with self.assertRaises(rangestring.RangeStringError):
+            rangestring.expand_handtype_group(('J3s', '-', 'QQ'))
 
     def test_token_to_hands(self):
         cases = (
@@ -88,7 +88,7 @@ class RangeStringTestCase(unittest.TestCase):
 
         for token, hand_strings in cases:
             self.assertEqual(
-                set(range_string.token_to_hands(token)), set(hand_strings)
+                set(rangestring.token_to_hands(token)), set(hand_strings)
             )
 
     def test_normalize_token(self):
@@ -105,10 +105,10 @@ class RangeStringTestCase(unittest.TestCase):
         )
 
         for token, normalized in cases:
-            self.assertEqual(range_string.normalize_token(token), normalized)
+            self.assertEqual(rangestring.normalize_token(token), normalized)
 
-        with self.assertRaises(range_string.RangeStringError):
-            range_string.normalize_token('77s')
+        with self.assertRaises(rangestring.RangeStringError):
+            rangestring.normalize_token('77s')
 
     def test_token_suitedness(self):
         cases = (
@@ -119,9 +119,9 @@ class RangeStringTestCase(unittest.TestCase):
         )
 
         for token, suitedness in cases:
-            self.assertEqual(range_string.token_suitedness(token), suitedness)
+            self.assertEqual(rangestring.token_suitedness(token), suitedness)
 
-        with self.assertRaises(range_string.RangeStringError):
-            range_string.token_suitedness('22o')
+        with self.assertRaises(rangestring.RangeStringError):
+            rangestring.token_suitedness('22o')
 
 suite = unittest.TestLoader().loadTestsFromTestCase(RangeStringTestCase)
