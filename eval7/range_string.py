@@ -177,9 +177,9 @@ def make_parser():
         (weight + pyparsing.Literal('(').suppress() + hand_group_list +
          pyparsing.Literal(')').suppress()) ^ hand_group_list
     )
-    hand_range = pyparsing.Optional(pyparsing.delimitedList(
+    handrange = pyparsing.Optional(pyparsing.delimitedList(
         weighted_hand_group_list)) + pyparsing.StringEnd()
-    return hand_range
+    return handrange
 
 
 def weight_to_float(w):
