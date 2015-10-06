@@ -1,0 +1,17 @@
+language: python
+python:
+  - "2.7"
+  - "3.4"
+cache: pip
+sudo: false
+env:
+  matrix:
+    - TOX_ENV=py27
+    - TOX_ENV=py34
+install:
+  - pip install --upgrade pip
+  - pip install tox
+script:
+  - tox -e $TOX_ENV
+after_script:
+  - cat .tox/$TOX_ENV/log/*.log
