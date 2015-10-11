@@ -7,21 +7,41 @@ from __future__ import absolute_import
 
 import unittest
 
-from eval7 import rangestring
+from eval7 import rangestring, Card
 
 
 class RangeStringTestCase(unittest.TestCase):
-    @unittest.skip('Unimplemented test')
     def test_string_to_hands(self):
-        pass
+        cases = (
+            (
+                'KK+, 0.2(As2d)', set((
+                    ((Card("As"), Card("2d")), 0.2),
+                    ((Card("Ks"), Card("Kh")), 1.0),
+                    ((Card("Kd"), Card("Kc")), 1.0),
+                    ((Card("Kh"), Card("Kc")), 1.0),
+                    ((Card("Ks"), Card("Kc")), 1.0),
+                    ((Card("Kh"), Card("Kd")), 1.0),
+                    ((Card("Ks"), Card("Kd")), 1.0),
+                    ((Card("Ad"), Card("Ac")), 1.0),
+                    ((Card("Ah"), Card("Ac")), 1.0),
+                    ((Card("As"), Card("Ac")), 1.0),
+                    ((Card("Ah"), Card("Ad")), 1.0),
+                    ((Card("As"), Card("Ad")), 1.0),
+                    ((Card("As"), Card("Ah")), 1.0),
+                ))
+            ),
+        )
 
-    @unittest.skip('Unimplemented test')
+        for string, hands in cases:
+            self.assertEqual(set(rangestring.string_to_hands(string)), hands)
+
     def test_tokens_to_string(self):
-        pass
+        cases = (
+            ([('AA', 1.0), ('AKs', 0.8)], 'AA, 80%(AKs)'),
+        )
 
-    @unittest.skip('Unimplemented test')
-    def test_parser(self):
-        pass
+        for tokens, string in cases:
+            self.assertEqual(rangestring.tokens_to_string(tokens), string)
 
     def test_string_to_tokens(self):
         self.assertEqual(
@@ -30,17 +50,17 @@ class RangeStringTestCase(unittest.TestCase):
         )
 
     def test_validate_string(self):
-        true_cases = (
+        valid_cases = (
             'ATs+, 80%(22-55)',
             'ATs+,KQ, .2(4s9s)',
         )
-        false_cases = (
+        invalid_cases = (
             'ATs+, KQ, .2(4s4s)',
             'AX+',
         )
-        for case in true_cases:
+        for case in valid_cases:
             self.assertTrue(rangestring.validate_string(case))
-        for case in false_cases:
+        for case in invalid_cases:
             self.assertFalse(rangestring.validate_string(case))
 
     def test_weight_to_float(self):
