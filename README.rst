@@ -102,3 +102,14 @@ Examples::
 At present the HandRange objects are just a thin front-end for the
 range-string parser. Ultimately the hope is to add Cython backed sampling,
 enumeration, and HandRange vs. HandRange equity calculation.
+
+Equity
+------
+
+eval7 also provides some basic equity calculation functions. Specifically
+`py_hand_vs_range_exact`, `py_hand_vs_range_monte_carlo` and
+`py_all_hands_vs_range`. These work, but are largely unoptimized and their
+interface is still a work in progress. Anyone interested in using them should
+refer to `equity.pyx` for documentaiton. Anyone interested in contributing
+could look to cleaning this up. Certainly the `HandRange` class should be a
+cdef class with appropriate methods.
