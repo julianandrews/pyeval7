@@ -41,8 +41,7 @@ Usage
 
 Basic usage::
 
-    >>> import eval7
-    >>> from pprint import pprint
+    >>> import eval7, pprint
     >>> deck = eval7.Deck()
     >>> deck.shuffle()
     >>> hand = deck.deal(7)
