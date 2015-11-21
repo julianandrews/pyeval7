@@ -8,16 +8,16 @@ from __future__ import absolute_import, division
 import unittest
 from collections import Counter
 
-import eval7.wh_rand
+import eval7.xorshift_rand
 
 
-class WhRandTestCase(unittest.TestCase):
+class XorshiftRandTestCase(unittest.TestCase):
     SAMPLE_RANGE = 52
     SAMPLE_COUNT = 36500 * SAMPLE_RANGE
     DELTA = 1000
 
     def setUp(self):
-        self.results = Counter(eval7.wh_rand.py_wh_randint(self.SAMPLE_RANGE)
+        self.results = Counter(eval7.xorshift_rand.randint(self.SAMPLE_RANGE)
                                for i in range(self.SAMPLE_COUNT))
 
     def test_rand_int_in_range(self):
@@ -33,4 +33,4 @@ class WhRandTestCase(unittest.TestCase):
                 self.results[i], expected_count, delta=self.DELTA
             )
 
-suite = unittest.TestLoader().loadTestsFromTestCase(WhRandTestCase)
+suite = unittest.TestLoader().loadTestsFromTestCase(XorshiftRandTestCase)

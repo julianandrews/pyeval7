@@ -4,7 +4,7 @@
 # of the MIT license.  See the LICENSE file for details.
 
 import cython
-from wh_rand cimport wh_randint
+from xorshift_rand cimport cy_randint
 from evaluate cimport cy_evaluate
 from cards cimport cards_to_mask
 
@@ -49,7 +49,7 @@ cdef cython.ulonglong deal_card(cython.ulonglong dead):
     cdef cython.uint cardex
     cdef cython.ulonglong card
     while True:
-        cardex = wh_randint(52)
+        cardex = cy_randint(52)
         card = card_masks_table[cardex]
         if dead & card == 0:
             return card
