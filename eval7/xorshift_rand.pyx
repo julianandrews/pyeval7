@@ -71,7 +71,7 @@ def init(seed=None):
     del time
     del struct
 
-    cy_init(seed)
+    cy_init(long(seed))
 
 
 def randint(int n):
