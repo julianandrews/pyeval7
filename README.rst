@@ -6,33 +6,29 @@ eval7
 
 Python Texas Hold'em hand evaluation library based on Anonymous7's codebase
 which is in turn based on Keith Rule's hand evaluator (which you can see
-here_). The library also provides a parser for an extended set of PokerStove
-style range strings, and a more or less working equity calculator, though
-that still needs a little cleaning up.
+here_). Eval7 also provides a parser for an extended set of PokerStove
+style range strings, and approximate equity calculation for unweighted ranges.
 
 .. _here: http://www.codeproject.com/Articles/12279/Fast-Texas-Holdem-Hand-
           Evaluation-and-Analysis
 
-The library is fairly basic at the moment; only the functionality needed by
-`Flop Ferret`_ has been fully implemented. Time permitting, the goal is to
-provide a fully featured poker hand evaluator and range equity calculator
-with a clean native python interface and all performance critical parts
-implemented in Cython.
+Eval7 is a work in progress: only the functionality needed by `Flop Ferret`_
+has been fully implemented. Time permitting, the goal is to provide a fully
+featured poker hand evaluator and range equity calculator with a clean native
+python interface and all performance critical parts implemented in Cython.
 
 .. _Flop Ferret: https://github.com/JulianAndrews/FlopFerret
 
 Installation
 ------------
 
-eval7 is tested on python 2.7 and 3.3. The build process requires cython
-(tested with 0.23). If you have a working copy of python::
+eval7 is tested on python 2.7 and 3.4 and likely works with any python ≥ 2.7.
+The build process requires cython (tested with 0.23). If you have a working
+copy of python::
 
     pip install cython
 
-should work on most platforms. Installing via your package manager or from
-source should also work.
-
-Simple Installation::
+should work. Once you have cython install with::
 
     pip install eval7
 
@@ -64,16 +60,10 @@ Basic usage::
     >>> eval7.handtype(67305472)
     'Straight'
 
-Larger numbers represent better hands!
-
-``Card`` objects provide a convenient python interface to cards with ``rank``
-and ``suit`` attributes.
-
-``Deck`` object provide some basic functionality that might be useful for
-simple simulations such as ``sample``, ``shuffle``, and ``deal``. The deck
-code isn't very well optimized at this point, so while it works well for
-quick lightweight simulations, you're not going to get the performance
-out of it needed for precise range vs. range equity calculations.
+``Deck`` objects provide ``sample``, ``shuffle``, ``deal`` and ``peek``
+methods. The deck code is currently implemented in pure python and works well
+for quick lightweight simulations, but is too slow for full range vs. range
+equity calculations. Ideally this code will be rewritten in Cython.
 
 Hand Ranges
 -----------
@@ -106,10 +96,7 @@ enumeration, and HandRange vs. HandRange equity calculation.
 Equity
 ------
 
-eval7 also provides some basic equity calculation functions. Specifically
-`py_hand_vs_range_exact`, `py_hand_vs_range_monte_carlo` and
-`py_all_hands_vs_range`. These work, but are largely unoptimized and their
-interface is still a work in progress. Anyone interested in using them should
-refer to `equity.pyx` for documentaiton. Anyone interested in contributing
-could look to cleaning this up. Certainly the `HandRange` class should be a
-cdef class with appropriate methods.
+eval7 also provides equity calculation functions: ``py_hand_vs_range_exact``,
+``py_hand_vs_range_monte_carlo`` and ``py_all_hands_vs_range``. These don't yet
+support weighted ranges and could probably benefit from optimization.  See
+``equity.pyx`` for documentaiton.
