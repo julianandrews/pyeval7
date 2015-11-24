@@ -3,8 +3,6 @@
 # This software may be modified and distributed under the terms
 # of the MIT license.  See the LICENSE file for details.
 
-from __future__ import absolute_import
-
 import unittest
 
 from eval7 import rangestring, Card
@@ -143,5 +141,3 @@ class RangeStringTestCase(unittest.TestCase):
 
         with self.assertRaises(rangestring.RangeStringError):
             rangestring.token_suitedness('22o')
-
-suite = unittest.TestLoader().loadTestsFromTestCase(RangeStringTestCase)

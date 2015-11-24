@@ -4,6 +4,7 @@
 # of the MIT license.  See the LICENSE file for details.
 
 import unittest
+
 import eval7
 
 
@@ -49,8 +50,3 @@ class TestEquity(unittest.TestCase):
         hand = tuple(map(eval7.Card, ("Qs", "Js")))
         self.assertAlmostEqual(equity_map[hand], 0.03687, delta=0.0002)
         self.assertEqual(len(equity_map), 1)
-
-
-if __name__ == '__main__':
-    # 2013-02-09 28 seconds
-    unittest.main()

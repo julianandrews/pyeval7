@@ -5,8 +5,8 @@
 
 from __future__ import absolute_import, division
 
+import collections
 import unittest
-from collections import Counter
 
 import eval7.xorshift_rand
 
@@ -17,20 +17,19 @@ class XorshiftRandTestCase(unittest.TestCase):
     DELTA = 1000
 
     def setUp(self):
-        self.results = Counter(eval7.xorshift_rand.randint(self.SAMPLE_RANGE)
-                               for i in range(self.SAMPLE_COUNT))
+        self.results = collections.Counter(
+            eval7.xorshift_rand.randint(self.SAMPLE_RANGE)
+            for i in range(self.SAMPLE_COUNT)
+        )
 
-    def test_rand_int_in_range(self):
+    def test_randint_in_range(self):
         allowed_values = list(range(52))
-        for i, count in self.results.items():
+        for i in self.results:
             self.assertIn(i, allowed_values)
 
-    def test_rand_int_is_uniform(self):
+    def test_randint_is_uniform(self):
         expected_count = self.SAMPLE_COUNT / self.SAMPLE_RANGE
         for i in range(self.SAMPLE_RANGE):
-            self.assertIn(i, self.results)
             self.assertAlmostEqual(
-                self.results[i], expected_count, delta=self.DELTA
+                self.results.get(i, 0), expected_count, delta=self.DELTA
             )
-
-suite = unittest.TestLoader().loadTestsFromTestCase(XorshiftRandTestCase)
