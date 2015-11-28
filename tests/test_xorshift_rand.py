@@ -12,9 +12,9 @@ import eval7.xorshift_rand
 
 
 class XorshiftRandTestCase(unittest.TestCase):
-    SAMPLE_COUNT = 10000000
+    SAMPLE_COUNT = 1000000
     BINS = 1000
-    DELTA = 450
+    DELTA = 125
 
     def check_uniform(self, counter):
         expected_count = self.SAMPLE_COUNT / self.BINS
