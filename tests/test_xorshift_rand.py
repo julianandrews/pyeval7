@@ -14,7 +14,7 @@ from eval7 import xorshift_rand
 class XorshiftRandTestCase(unittest.TestCase):
     SAMPLE_COUNT = 1000000
     BINS = 1000
-    DELTA = 125
+    DELTA = 150  # This should give < 1% chance of failure per test
 
     def check_uniform(self, counter):
         expected_count = self.SAMPLE_COUNT / self.BINS
