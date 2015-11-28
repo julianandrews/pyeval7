@@ -7,3 +7,4 @@ import cython
 
 cdef void cy_seed(cython.ulong seed)
 cpdef int randint(int n)
+cpdef double random()
