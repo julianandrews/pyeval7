@@ -5,5 +5,5 @@
 
 import cython
 
-cdef void cy_init(cython.ulong seed)
-cdef int cy_randint(int n)
+cdef void cy_seed(cython.ulong seed)
+cpdef int randint(int n)

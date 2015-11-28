@@ -12,24 +12,28 @@ import eval7.xorshift_rand
 
 
 class XorshiftRandTestCase(unittest.TestCase):
-    SAMPLE_RANGE = 52
-    SAMPLE_COUNT = 36500 * SAMPLE_RANGE
-    DELTA = 1000
+    SAMPLE_COUNT = 10000000
+    BINS = 1000
+    DELTA = 450
 
-    def setUp(self):
-        self.results = collections.Counter(
-            eval7.xorshift_rand.randint(self.SAMPLE_RANGE)
-            for i in range(self.SAMPLE_COUNT)
+    def check_uniform(self, counter):
+        expected_count = self.SAMPLE_COUNT / self.BINS
+        self.assertEqual(set(range(self.BINS)), set(counter.keys()))
+        for count in counter.values():
+            self.assertAlmostEqual(
+                count, expected_count, delta=self.DELTA
+            )
+
+    def test_random_is_uniform(self):
+        sample = (
+            eval7.xorshift_rand.random() for i in range(self.SAMPLE_COUNT)
         )
-
-    def test_randint_in_range(self):
-        allowed_values = list(range(52))
-        for i in self.results:
-            self.assertIn(i, allowed_values)
+        counter = collections.Counter(int(num * self.BINS) for num in sample)
+        self.check_uniform(counter)
 
     def test_randint_is_uniform(self):
-        expected_count = self.SAMPLE_COUNT / self.SAMPLE_RANGE
-        for i in range(self.SAMPLE_RANGE):
-            self.assertAlmostEqual(
-                self.results.get(i, 0), expected_count, delta=self.DELTA
-            )
+        sample = (
+            eval7.xorshift_rand.randint(self.BINS)
+            for i in range(self.SAMPLE_COUNT)
+        )
+        self.check_uniform(collections.Counter(sample))
