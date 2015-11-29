@@ -5,6 +5,6 @@
 
 import cython
 
-cdef void cy_seed(cython.ulong seed)
+cdef void cy_seed(unsigned long seed)
 cpdef int randint(int n)
 cpdef double random()

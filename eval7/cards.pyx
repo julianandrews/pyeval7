@@ -23,7 +23,7 @@ cdef class Card:
     def __init__(self, card_string):
         self.rank = ranks.index(card_string[0])
         self.suit = suits.index(card_string[1])
-        self.mask = (<cython.ulonglong>1) << (13*self.suit + self.rank)
+        self.mask = (<unsigned long long>1) << (13*self.suit + self.rank)
 
     def __str__(self):
         return ranks[self.rank] + suits[self.suit]
@@ -112,8 +112,8 @@ class Deck:
         return random.sample(self.cards, n)
 
 
-cdef cython.ulonglong cards_to_mask(py_cards):
-    cdef cython.ulonglong cards = 0
+cdef unsigned long long cards_to_mask(py_cards):
+    cdef unsigned long long cards = 0
     for py_card in py_cards:
         cards |= py_card.mask
     return cards
