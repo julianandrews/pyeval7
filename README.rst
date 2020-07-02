@@ -22,15 +22,31 @@ python interface and all performance critical parts implemented in Cython.
 Installation
 ------------
 
-eval7 is tested on python 2.7 and 3.4 and likely works with any python ≥ 2.7.
+Linux with 3.7
+~~~~~~~~~~~~~~
+
+There is a `manylinux` wheel on PyPI that for python 3.7:
+
+   pip install eval7
+
+Although not officially supported, there's also a wheel for python 2.7 that
+probably still works.
+
+Other Platforms
+~~~~~~~~~~~~~~~
+
+eval7 is tested on python 3.5, 3.6, and 3.7 and likely works with 2.7.
 The build process requires cython (tested with 0.23). If you have a working
 copy of python::
 
     pip install cython
 
-should work. Once you have cython install with::
+should work. Once you have cython, clone the repo and install with::
 
-    pip install eval7
+    python setup.py install
+
+If you have difficulty installing, please open an issue! If there's much
+interest I can get wheels built for other platforms with a little effort.
 
 Usage
 -----
