@@ -13,17 +13,17 @@ suits = ('c', 'd', 'h', 's')
 
 cdef class Card:
     """
-    A card with a rank and suit, initialized from a string, and with an
-    integer 'mask' value used for evaluation and equity calcuations.
+    A card with a rank and suit, and integer 'mask' value used for evaluation
+    and equity calcuations.
 
     Example:
         cards = map(Card, ('As', '4d', '4c', '3s', '2d'))
         eval7.evaluate(cards)
     """
-    def __init__(self, card_string):
-        self.rank = ranks.index(card_string[0])
-        self.suit = suits.index(card_string[1])
-        self.mask = (<unsigned long long>1) << (13*self.suit + self.rank)
+    def __cinit__(self, card_string):
+        rank = ranks.index(card_string[0])
+        suit = suits.index(card_string[1])
+        self.mask = (<unsigned long long>1) << (13 * suit + rank)
 
     def __str__(self):
         return ranks[self.rank] + suits[self.suit]
@@ -59,6 +59,14 @@ cdef class Card:
     def __hash__(self):
         return self.mask
 
+    @property
+    def rank(self):
+        return find_set_bit(self.mask) % 13
+
+    @property
+    def suit(self):
+        return find_set_bit(self.mask) // 13
+
 
 class Deck:
     """
@@ -90,7 +98,7 @@ class Deck:
     def shuffle(self):
         """Randomize the order of the cards in the deck."""
         random.shuffle(self.cards)
-        
+
     def deal(self, n):
         """Remove the top n cards from the deck and return them."""
         if n> len(self.cards):
@@ -108,7 +116,7 @@ class Deck:
     def sample(self, n):
         """Return n random cards from the deck. The deck will be unaltered."""
         if n> len(self.cards):
-            raise ValueError("Insufficient cards in deck")        
+            raise ValueError("Insufficient cards in deck")
         return random.sample(self.cards, n)
 
 
@@ -117,3 +125,13 @@ cdef unsigned long long cards_to_mask(py_cards):
     for py_card in py_cards:
         cards |= py_card.mask
     return cards
+
+cdef int find_set_bit(unsigned long long value):
+    """Finds the bit set in value assuming value has exactly one bit set."""
+    cdef int r = 0
+
+    while value > 0:
+        r += 1
+        value >>= 1
+
+    return r - 1

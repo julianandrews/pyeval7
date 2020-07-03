@@ -7,6 +7,5 @@ import cython
 
 cdef class Card:
     cdef public unsigned long long mask
-    cdef public unsigned short rank, suit
 
 cdef unsigned long long cards_to_mask(py_cards)
