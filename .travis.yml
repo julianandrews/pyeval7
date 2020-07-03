@@ -3,6 +3,7 @@ python:
   - "3.5"
   - "3.6"
   - "3.7"
+  - "3.8"
 cache: pip
 sudo: false
 env:
@@ -10,6 +11,7 @@ env:
     - TOX_ENV=py35
     - TOX_ENV=py36
     - TOX_ENV=py37
+    - TOX_ENV=py38
 install:
   - pip install cython
   - pip install tox
