@@ -1,17 +1,16 @@
 language: python
-python:
-  - "3.5"
-  - "3.6"
-  - "3.7"
-  - "3.8"
 cache: pip
 sudo: false
-env:
-  matrix:
-    - TOX_ENV=py35
-    - TOX_ENV=py36
-    - TOX_ENV=py37
-    - TOX_ENV=py38
+matrix:
+  include:
+    - python: 3.5
+      eng: TOX_ENV=py35
+    - python: 3.6
+      eng: TOX_ENV=py36
+    - python: 3.7
+      eng: TOX_ENV=py37
+    - python: 3.8
+      eng: TOX_ENV=py38
 install:
   - pip install cython
   - pip install tox
