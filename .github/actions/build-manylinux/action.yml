@@ -1,0 +1,11 @@
+name: build manylinux wheel
+description: Build manylinux wheels
+inputs:
+  python_version:
+    description: Version of python
+    required: true
+runs:
+  using: docker
+  image: docker://quay.io/pypa/manylinux1_x86_64
+  args:
+    - .github/actions/build-manylinux/entrypoint.sh
