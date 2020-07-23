@@ -1,0 +1,32 @@
+name: build wheels for macos and windows
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest]
+        architecture: [x64, x86]
+        python-version: [3.6, 3.7, 3.8]
+        exclude:
+          - os: macos-latest
+            architecture: x86
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          architecture: ${{ matrix.architecture }}
+          python-version: ${{ matrix.python-version }}
+      - name: build wheel
+        run: |
+          pip install -U wheel cython
+          python setup.py bdist_wheel
+        shell: bash
+      - name: upload wheel
+        uses: actions/upload-artifact@v1
+        with:
+          name: dist_${{ matrix.os }}_${{ matrix.architecture }}_${{ matrix.python-version }}
+          path: dist
