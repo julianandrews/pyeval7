@@ -13,7 +13,6 @@ __all__ = ["seed", "randint"]
 cdef unsigned long _seed[16]
 cdef int _seed_index;
 
-
 cdef void cy_seed(unsigned long seed):
     """Use xorshift64* with a 64 bit seed to generate a 1024 bit seed.
 
@@ -24,10 +23,9 @@ cdef void cy_seed(unsigned long seed):
     _seed_index = 0
     for i in range(15):
         _seed[i + 1] = _seed[i] ^ (_seed[i] >> 12)
-        _seed[i + 1] = _seed[i + 1] ^ (_seed[i + 1]  << 25)
-        _seed[i + 1] = _seed[i + 1] ^ (_seed[i + 1]  >> 27)
-        _seed[i + 1] = _seed[i + 1] * <unsigned long>(2685821657736338717)
-    
+        _seed[i + 1] = _seed[i + 1] ^ (_seed[i + 1] << 25)
+        _seed[i + 1] = _seed[i + 1] ^ (_seed[i + 1] >> 27)
+        _seed[i + 1] = _seed[i + 1] * <unsigned long> (2685821657736338717)
 
 cdef unsigned long next_rand():
     """Return a random ulong using xorshift1024*."""
@@ -42,12 +40,11 @@ cdef unsigned long next_rand():
     s0 = s0 ^ (s0 >> 30)
     _seed[_seed_index] = s0 ^ s1
 
-    return _seed[_seed_index] * <unsigned long>(1181783497276652981)
-
+    return _seed[_seed_index] * <unsigned long> (1181783497276652981)
 
 cpdef int randint(int n):
     """Return a random integer 0 <= x < n."""
-    
+
     # Reject an apropriate fraction of samples to avoid bias. The loop should
     # take an average of fewer than 2 iterations even in the worst case.
     cdef unsigned long r
@@ -56,14 +53,14 @@ cpdef int randint(int n):
     while True:
         r = next_rand()
         val = r % n
-        if r - val + n - 1 >= 0:  
+        if r - val + n - 1 >= 0:
             return val
-
 
 cpdef double random():
     """Return a random double 0 < x <= 1."""
-    return <double> next_rand() / <double>(<unsigned long> - 1)
+    return <double> next_rand() / <double> (<unsigned long> - 1)
 
+MAX_ULONG = 4294967295
 
 def seed(seed=None):
     """Seed the random number generator.
@@ -74,8 +71,6 @@ def seed(seed=None):
         seed = struct.unpack('q', struct.pack('d', time.time()))[0]
     del struct
     del time
-
-    cy_seed(long(seed))
-
+    cy_seed(seed % MAX_ULONG)
 
 seed()
