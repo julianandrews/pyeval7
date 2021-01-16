@@ -20,7 +20,15 @@ cdef class Card:
         cards = map(Card, ('As', '4d', '4c', '3s', '2d'))
         eval7.evaluate(cards)
     """
-    def __cinit__(self, card_string):
+
+    def __cinit__(self, card_string=None):
+        if card_string is not None:
+            self.__setstate__(card_string)
+
+    def __getstate__(self):
+        return self.__str__()
+
+    def __setstate__(self, card_string):
         rank = ranks.index(card_string[0])
         suit = suits.index(card_string[1])
         self.mask = (<unsigned long long>1) << (13 * suit + rank)
