@@ -3,10 +3,9 @@
 # This software may be modified and distributed under the terms
 # of the MIT license.  See the LICENSE file for details.
 
-import cython
-from xorshift_rand cimport randint
-from evaluate cimport cy_evaluate
-from cards cimport cards_to_mask
+from .xorshift_rand cimport randint
+from .evaluate cimport cy_evaluate
+from .cards cimport cards_to_mask
 
 
 cdef extern from "stdlib.h":

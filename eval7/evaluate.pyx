@@ -3,8 +3,7 @@
 # This software may be modified and distributed under the terms
 # of the MIT license.  See the LICENSE file for details.
 
-import cython
-from cards cimport cards_to_mask
+from .cards cimport cards_to_mask
 
 
 cdef extern from "arrays.h":
