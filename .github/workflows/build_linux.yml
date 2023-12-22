@@ -1,6 +1,9 @@
 name: build wheels for linux
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   build:

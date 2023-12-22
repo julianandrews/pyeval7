@@ -7,16 +7,17 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python: [3.6, 3.7, 3.8]
+        python: ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12"]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python }}
       - name: Install eval7
         run: |
-          pip install cython pytest
+          python -m pip install --upgrade pip setuptools
+          python -m pip install cython pytest
           python setup.py install
       - name: Run Tests
         run: py.test
