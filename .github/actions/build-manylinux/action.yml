@@ -6,6 +6,6 @@ inputs:
     required: true
 runs:
   using: docker
-  image: docker://quay.io/pypa/manylinux1_x86_64
+  image: docker://quay.io/pypa/manylinux_2_28_x86_64
   args:
     - .github/actions/build-manylinux/entrypoint.sh
