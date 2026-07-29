@@ -74,4 +74,4 @@ jobs:
           pattern: dist_*
           merge-multiple: true
       - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release
+        uses: pypa/gh-action-pypi-publish@v1.14.1
