@@ -1,0 +1,77 @@
+name: Publish to PyPI
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build_manylinux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: build wheels
+        uses: ./.github/actions/build-manylinux
+      - name: upload wheels
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist_manylinux
+          path: wheelhouse
+
+  build_macos:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: build wheel
+        run: |
+          pip install -U setuptools wheel cython
+          python setup.py bdist_wheel
+        shell: bash
+      - name: upload wheel
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist_macos_${{ matrix.python-version }}
+          path: dist
+
+  build_windows:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        architecture: [x64, x86]
+        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          architecture: ${{ matrix.architecture }}
+          python-version: ${{ matrix.python-version }}
+      - name: build wheel
+        run: |
+          pip install -U setuptools wheel cython
+          python setup.py bdist_wheel
+        shell: bash
+      - name: upload wheel
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist_windows_${{ matrix.architecture }}_${{ matrix.python-version }}
+          path: dist
+
+  publish:
+    needs: [build_manylinux, build_macos, build_windows]
+    runs-on: ubuntu-latest
+    steps:
+      - name: download all wheels
+        uses: actions/download-artifact@v4
+        with:
+          pattern: dist_*
+          merge-multiple: true
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release

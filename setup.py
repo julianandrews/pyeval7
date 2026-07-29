@@ -10,7 +10,7 @@ extensions = cythonize('eval7/*.pyx')
 
 setup(
     name='eval7',
-    version='0.1.10',
+    version='0.1.11',
     description='A poker hand evaluation and equity calculation library',
     long_description=long_description,
     long_description_content_type='text/x-rst',
@@ -20,9 +20,12 @@ setup(
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
+        'Programming Language :: Python :: 3.12',
         'Programming Language :: Cython',
         'Topic :: Software Development :: Libraries',
         'Topic :: Games/Entertainment',
