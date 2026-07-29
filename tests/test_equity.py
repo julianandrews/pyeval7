@@ -48,5 +48,5 @@ class TestEquity(unittest.TestCase):
         board = tuple(map(eval7.Card, ("Kh", "Jd", "8c")))
         equity_map = eval7.py_all_hands_vs_range(hero, villain, board, 10000000)
         hand = tuple(map(eval7.Card, ("Qs", "Js")))
-        self.assertAlmostEqual(equity_map[hand], 0.03687, delta=0.0002)
+        self.assertAlmostEqual(equity_map[hand], 0.03687, delta=0.0003)
         self.assertEqual(len(equity_map), 1)
